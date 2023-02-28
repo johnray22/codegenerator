@@ -8,10 +8,16 @@ spring:
     time-zone: GMT+8
 
   datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#    username: wxlsp1
+#    password: wxlsp1
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    url: jdbc:mysql://tx.zhongruigo.com/wxl_sp1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
     driver-class-name: com.mysql.jdbc.Driver
-    username: island
-    password: root
+    username: zhyspboot
+    password: zhyspboot
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://47.102.210.203/island?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+    url: jdbc:mysql://tx.zhongruigo.com/zhy?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+
 server:
-  port: 8080
+  port: 8088

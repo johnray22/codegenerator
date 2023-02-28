@@ -27,11 +27,11 @@ public class CodeGenerator {
     /**
      * 公共包路径
      */
-    private String parentPackage = "cn.hellochaos";
+    private String parentPackage = "com.zhy";
     /**
      * 模块名
      */
-    private String module = "generator";
+    private String module = "back";
 
     /**
      * 自定义模板位置

@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import cn.hellochaos.generator.exception.bizException.BizException;
+import BizException;
 
 /**
 * <p>
@@ -49,8 +49,8 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
     public int insert${entity}(${entity} ${entity?uncap_first}) {
         log.info("正在插入${entity?uncap_first}");
         if (super.save(${entity?uncap_first})) {
-            log.info("插入${entity?uncap_first}成功,id为{}",${entity?uncap_first}.get${entity}Id());
-            return ${entity?uncap_first}.get${entity}Id();
+            log.info("插入${entity?uncap_first}成功,id为{}",${entity?uncap_first}.getId());
+            return ${entity?uncap_first}.getId();
         } else {
             log.error("插入${entity?uncap_first}失败");
             throw new BizException("添加失败");
@@ -71,13 +71,13 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
 
     @Override
     public int update${entity}(${entity} ${entity?uncap_first}) {
-        log.info("正在更新id为{}的${entity?uncap_first}",${entity?uncap_first}.get${entity}Id());
+        log.info("正在更新id为{}的${entity?uncap_first}",${entity?uncap_first}.getId());
         if (super.updateById(${entity?uncap_first})) {
-            log.info("更新d为{}的${entity?uncap_first}成功",${entity?uncap_first}.get${entity}Id());
-            return ${entity?uncap_first}.get${entity}Id();
+            log.info("更新d为{}的${entity?uncap_first}成功",${entity?uncap_first}.getId());
+            return ${entity?uncap_first}.getId();
         } else {
-            log.error("更新id为{}的${entity?uncap_first}失败",${entity?uncap_first}.get${entity}Id());
-            throw new BizException("更新失败[id=" + ${entity?uncap_first}.get${entity}Id() + "]");
+            log.error("更新id为{}的${entity?uncap_first}失败",${entity?uncap_first}.getId());
+            throw new BizException("更新失败[id=" + ${entity?uncap_first}.getId() + "]");
         }
     }
 
