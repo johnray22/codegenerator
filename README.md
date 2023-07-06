@@ -1,0 +1,290 @@
+# 基于mybatis-plus的springboot代码生成器
+
+
+
+[![release](https://img.shields.io/badge/release-1.0.0-green)](https://github.com/misterchaos/springboot-mybatis-plus-generator)
+[![release](https://img.shields.io/badge/version-beta-orange)](https://github.com/misterchaos/springboot-mybatis-plus-generator/releases)
+[![release](https://img.shields.io/badge/build-passing-green)](https://github.com/misterchaos/springboot-mybatis-plus-generator/releases)
+![](https://img.shields.io/badge/license-Apache-blue)
+
+[![Stargazers over time](https://starchart.cc/misterchaos/springboot-mybatis-plus-generator.svg)](https://starchart.cc/misterchaos/springboot-mybatis-plus-generator)
+
+## :droplet:Overview
+
+这是一个基于mybatis-plus官方的AutoGenerator代码生成器+定制代码模板的[springboot代码生成器](https://github.com/misterchaos/springboot-mybatis-plus-generator)。
+
+**使用这个生成器你可以在1分钟之内生成数据库表对应的实体类，以及Mapper，Service，Controller层的基本CURD代码，并可以立即运行测试接口。**
+
+如果你不了解什么是mybatis-plus，请参考[官方文档](https://mp.baomidou.com/)
+
+本代码生成器具有以下优点：
+
+- 只需三步，即可开始测试CURD接口
+- 生成的代码风格良好，注释详细（遵循阿里巴巴开发规范）
+- 带有程序执行日志打印和错误日志打印
+
+## :star:Features
+
+- 实现controller restful风格CURD接口
+- service层CURD对IService的方法再次封装，方便添加业务逻辑
+- serviceImpl中方法实现执行日志打印
+- mapper模板在官方模板基础上加入@mapper注解
+- 各模板方法添加Javadoc注释
+- 实现分页查询，关键词模糊查询（需自定义字段）
+## :point_right:Quick Start
+
+**动画演示**：
+
+![](https://raw.githubusercontent.com/misterchaos/img/master/image/20200502135628.gif)
+
+
+
+**使用步骤：**
+
+- 修改`src/main/resources/application.properties`配置文件(自行创建)，设置数据库信息
+```
+#DataSource Config
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+spring.datasource.url=jdbc:mysql://localhost:3306/flower?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+spring.datasource.username=root
+spring.datasource.password=
+```
+- 运行`CodeGenerator`类，输入Author，输入数据库表名
+- 运行`SpringbootMybatisPlusGeneratorApplication`,测试接口
+
+> 注意：数据库表必须符合以下规范<br>
+> 每张表的主键命名为 表名_id 如: user_id
+
+## :bulb:Examples
+
+### 1.Controller模板代码示例
+
+```java
+package com.hellochaos.generator.controller;
+
+
+import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import ResEntity;
+import com.hellochaos.generator.service.UserService;
+import com.hellochaos.generator.entity.User;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * <p>
+ * 用户 前端控制器
+ * </p>
+ *
+ * @author chaos
+ * @since 2020-05-02
+ * @version v1.0
+ */
+@RestController
+@RequestMapping("/generator/api/v1/user")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    /**
+     * 查询分页数据
+     */
+    @RequestMapping(method = RequestMethod.GET)
+    public ResEntity<?> listByPage(@RequestParam(name = "page", defaultValue = "1") int page,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                    @RequestParam String keyword) {
+        return new ResEntity<>(userService.listUsersByPage(page, pageSize, keyword));
+    }
+
+
+    /**
+     * 根据id查询
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public ResEntity<?> getById(@PathVariable("id") Integer id) {
+        return new ResEntity<>(userService.getUserById(id));
+    }
+
+    /**
+     * 新增
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    public ResEntity<?> insert(@RequestBody User user) {
+        return new ResEntity<>(userService.insertUser(user));
+    }
+
+    /**
+     * 删除
+     */
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
+    public ResEntity<?> deleteById(@PathVariable("id") Integer id) {
+        return new ResEntity<>(userService.deleteUserById(id));
+    }
+
+    /**
+     * 修改
+     */
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResEntity<?> updateById(@RequestBody User user) {
+        return new ResEntity<>(userService.updateUser(user));
+    }
+}
+
+```
+
+### 2.Service模板代码示例
+
+```java
+package com.hellochaos.generator.service;
+
+import com.hellochaos.generator.entity.User;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+/**
+ * <p>
+ * 用户 服务类
+ * </p>
+ *
+ * @author chaos
+ * @since 2020-05-02
+ */
+public interface UserService {
+
+    /**
+     * 分页查询User
+     *
+     * @param page     当前页数
+     * @param pageSize 页的大小
+     * @param keyword  搜索关键词
+     * @return 返回mybatis-plus的Page对象,其中records字段为符合条件的查询结果
+     * @author chaos
+     * @since 2020-05-02
+     */
+    Page<User> listUsersByPage(int page, int pageSize, String keyword);
+
+    /**
+     * 根据id查询User
+     *
+     * @param id 需要查询的User的id
+     * @return 返回对应id的User对象
+     * @author chaos
+     * @since 2020-05-02
+     */
+    User getUserById(int id);
+
+    /**
+     * 插入User
+     *
+     * @param user 需要插入的User对象
+     * @return 返回插入成功之后User对象的id
+     * @author chaos
+     * @since 2020-05-02
+     */
+    int insertUser(User user);
+
+    /**
+     * 根据id删除User
+     *
+     * @param id 需要删除的User对象的id
+     * @return 返回被删除的User对象的id
+     * @author chaos
+     * @since 2020-05-02
+     */
+    int deleteUserById(int id);
+
+    /**
+     * 根据id更新User
+     *
+     * @param user 需要更新的User对象
+     * @return 返回被更新的User对象的id
+     * @author chaos
+     * @since 2020-05-02
+     */
+    int updateUser(User user);
+
+}
+```
+
+### 3.ServiceImpl模板代码示例
+
+```java
+package com.hellochaos.generator.service.impl;
+
+import com.hellochaos.generator.entity.User;
+import com.hellochaos.generator.mapper.UserMapper;
+import com.hellochaos.generator.service.UserService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
+import BizException;
+
+/**
+ * <p>
+ * 用户 服务实现类
+ * </p>
+ *
+ * @author chaos
+ * @since 2020-05-02
+ */
+@Slf4j
+@Service
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Override
+    public Page<User> listUsersByPage(int page, int pageSize, String keyword) {
+        log.info("正在执行分页查询user: page = {} pageSize = {} keyword = {}", page, pageSize, keyword);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<User>().like("", keyword);
+        //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
+        Page<User> result = super.page(new Page<>(page, pageSize));
+        log.info("分页查询user完毕: 结果数 = {} ", result.getRecords().size());
+        return result;
+    }
+
+    @Override
+    public User getUserById(int id) {
+        log.info("正在查询user中id为{}的数据", id);
+        User user = super.getById(id);
+        log.info("查询id为{}的user{}", id, (null == user ? "无结果" : "成功"));
+        return user;
+    }
+
+    @Override
+    public int insertUser(User user) {
+        log.info("正在插入user");
+        if (super.save(user)) {
+            log.info("插入user成功,id为{}", user.getUserId());
+            return user.getUserId();
+        } else {
+            log.error("插入user失败");
+            throw new BizException("添加失败");
+        }
+    }
+
+    @Override
+    public int deleteUserById(int id) {
+        log.info("正在删除id为{}的user", id);
+        if (super.removeById(id)) {
+            log.info("删除id为{}的user成功", id);
+            return id;
+        } else {
+            log.error("删除id为{}的user失败", id);
+            throw new BizException("删除失败[id=" + id + "]");
+        }
+    }
+
+    @Override
+    public int updateUser(User user) {
+        log.info("正在更新id为{}的user", user.getUserId());
+        if (super.updateById(user)) {
+            log.info("更新d为{}的user成功", user.getUserId());
+            return user.getUserId();
+        } else {
+            log.error("更新id为{}的user失败", user.getUserId());
+            throw new BizException("更新失败[id=" + user.getUserId() + "]");
+        }
+    }
+
+}
+```
