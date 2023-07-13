@@ -3,7 +3,7 @@ package ${package.Controller};
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import ${package.Entity}.dto.ResEntity;
+import ${package.Entity}.dto.ResponseData;
 import ${package.Service}.${table.serviceName};
 import ${package.Entity}.${entity};
 <#if restControllerStyle>
@@ -47,40 +47,40 @@ public class ${table.controllerName} {
     * 查询所有数据
     */
     @GetMapping("/all")
-    public ResEntity<?> getAll() {
-        return new ResEntity<>(${table.serviceName?uncap_first}.getAll());
+    public ResponseData<?> getAll() {
+        return new ResponseData<>(${table.serviceName?uncap_first}.getAll());
     }
 
     /**
     * 根据id查询
     */
     @GetMapping("/byid/{id}")
-    public ResEntity<?> getById(@PathVariable("id") Integer id) {
-        return new ResEntity<>(${table.serviceName?uncap_first}.get${entity}ById(id));
+    public ResponseData<?> getById(@PathVariable("id") Integer id) {
+        return new ResponseData<>(${table.serviceName?uncap_first}.get${entity}ById(id));
     }
 
     /**
     * 新增
     */
     @PostMapping("/new")
-    public ResEntity<?> insert(@RequestBody ${entity} ${entity?uncap_first}) {
-        return new ResEntity<>(${table.serviceName?uncap_first}.insert${entity}(${entity?uncap_first}));
+    public ResponseData<?> insert(@RequestBody ${entity} ${entity?uncap_first}) {
+        return new ResponseData<>(${table.serviceName?uncap_first}.insert${entity}(${entity?uncap_first}));
     }
 
     /**
     * 删除
     */
     @DeleteMapping("/byid/{id}")
-    public ResEntity<?> deleteById(@PathVariable("id") Integer id) {
-        return new ResEntity<>(${table.serviceName?uncap_first}.delete${entity}ById(id));
+    public ResponseData<?> deleteById(@PathVariable("id") Integer id) {
+        return new ResponseData<>(${table.serviceName?uncap_first}.delete${entity}ById(id));
     }
 
     /**
     * 修改
     */
     @PutMapping("/byid/{id}")
-    public ResEntity<?> updateById(@RequestBody ${entity} ${entity?uncap_first}) {
-        return new ResEntity<>(${table.serviceName?uncap_first}.update${entity}(${entity?uncap_first}));
+    public ResponseData<?> updateById(@RequestBody ${entity} ${entity?uncap_first}) {
+        return new ResponseData<>(${table.serviceName?uncap_first}.update${entity}(${entity?uncap_first}));
     }
 }
 </#if>
