@@ -27,11 +27,11 @@ public class CodeGenerator {
     /**
      * 公共包路径
      */
-    private String parentPackage = "com.yz";
+    private String parentPackage = "com.baenae";
     /**
      * 模块名
      */
-    private String module = "rearend";
+    private String module = "nfcaudio";
 
     /**
      * 自定义模板位置

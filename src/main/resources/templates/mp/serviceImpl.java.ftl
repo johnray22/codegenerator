@@ -48,7 +48,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
             return true;
         } else {
             log.error("插入${entity?uncap_first}失败");
-            throw new ViewException("添加失败");
+            throw new ViewException(ViewExceptionType.INSERT_FAILED);
         }
     }
 
@@ -59,7 +59,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
             return true;
         } else {
             log.error("删除${entity?uncap_first}失败");
-            throw new ViewException("删除${entity?uncap_first}失败");
+            throw new ViewException(ViewExceptionType.DELETE_FAILED);
         }
     }
 
@@ -70,7 +70,7 @@ public class ${table.serviceImplName} extends ${superServiceImplClass}<${table.m
             return true;
         } else {
             log.error("更新${entity?uncap_first}失败");
-            throw new ViewException("更新${entity?uncap_first}失败");
+            throw new ViewException(ViewExceptionType.UPDATE_FAILED);
         }
     }
 
